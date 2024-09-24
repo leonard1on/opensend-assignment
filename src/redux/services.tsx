@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "./store/store";
+import { LoginResponse } from "../types/responses/LoginResponse";
+import { UserProfile } from "../types/responses/UserProfile";
 
 type loginParams = {
   email: string;
@@ -21,7 +23,7 @@ export const api = createApi({
     },
   }),
   endpoints: (build) => ({
-    login: build.mutation<unknown, loginParams>({
+    login: build.mutation<LoginResponse, loginParams>({
       query: ({ email, password }) => ({
         url: "/auth/login",
         method: "POST",
@@ -31,7 +33,7 @@ export const api = createApi({
         },
       }),
     }),
-    getUserProfile: build.query<unknown, void>({
+    getUserProfile: build.query<UserProfile, void>({
       query: () => ({
         url: "/self/profile",
         method: "GET",
@@ -47,4 +49,8 @@ export const api = createApi({
   }),
 });
 
-export const { useLoginMutation } = api;
+export const {
+  useLoginMutation,
+  useLazyGetStoreInfoQuery,
+  useLazyGetUserProfileQuery,
+} = api;

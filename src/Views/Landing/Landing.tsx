@@ -1,27 +1,34 @@
 import { useState } from "react";
 import { useLoginMutation } from "../../redux/services";
-import { useDispatch } from "react-redux";
-import { storeTokens } from "../../redux/actions/UserActions";
-
+import { useDispatch, useSelector } from "react-redux";
+import { storeTokens, clearTokens } from "../../redux/actions/UserActions";
+import {
+  getAccessToken,
+  getClientToken,
+} from "../../redux/reducers/userSliceReducer";
 import Button from "react-bootstrap/Button";
 // import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 // import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
+import { Navigate } from "react-router-dom";
 
 const Landing = () => {
   const dispatch = useDispatch();
+  const accessToken = useSelector(getAccessToken);
+  const clientToken = useSelector(getClientToken);
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
-  const [login, { data, error, isLoading }] = useLoginMutation();
+  const [login] = useLoginMutation();
 
   const handleLogin = () => {
     login({ email, password })
       .unwrap()
-      .then((resp: any) => {
+      .then((resp) => {
         console.log(resp);
         const payload: { accessToken: string; clientToken: string } = {
           accessToken: resp.tokens.accessToken,
@@ -31,6 +38,10 @@ const Landing = () => {
       })
       .catch((err) => setMessage(err.error));
   };
+
+  if (!accessToken || !clientToken) {
+    return <Navigate to={"/"} />;
+  }
 
   return (
     <Container className="m-2">
@@ -58,7 +69,11 @@ const Landing = () => {
             <Button className="w-100" variant="primary" onClick={handleLogin}>
               Login
             </Button>
-            <Button className="mt-2 w-100" variant="secondary">
+            <Button
+              className="mt-2 w-100"
+              variant="secondary"
+              onClick={() => dispatch(clearTokens())}
+            >
               Forgot your password?
             </Button>
           </div>

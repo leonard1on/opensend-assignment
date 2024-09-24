@@ -1,11 +1,25 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../store/store";
+import { UserProfile } from "../../types/responses/UserProfile";
+
+export const getAccessToken = (state: RootState) => state.user.accessToken;
+export const getClientToken = (state: RootState) => state.user.clientToken;
+
+interface userSlice {
+  accessToken: string;
+  clientToken: string;
+  userProfile?: UserProfile;
+}
+
+const initialState: userSlice = {
+  accessToken: localStorage.getItem("accessToken") || "",
+  clientToken: localStorage.getItem("clientToken") || "",
+  userProfile: undefined,
+};
 
 export const userSlice = createSlice({
   name: "user",
-  initialState: {
-    accessToken: localStorage.getItem("accessToken") || "",
-    clientToken: localStorage.getItem("clientToken") || "",
-  },
+  initialState,
   reducers: {
     storeTokens(
       state,
