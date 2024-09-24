@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { useLazyLoginQuery, useLoginMutation } from "../../redux/services";
+import { useLoginMutation } from "../../redux/services";
+import { useDispatch } from "react-redux";
+import { storeTokens } from "../../redux/actions/UserActions";
 
 import Button from "react-bootstrap/Button";
 // import Col from "react-bootstrap/Col";
@@ -9,6 +11,7 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 
 const Landing = () => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [message, setMessage] = useState<string>("");
@@ -18,8 +21,13 @@ const Landing = () => {
   const handleLogin = () => {
     login({ email, password })
       .unwrap()
-      .then((resp) => {
+      .then((resp: any) => {
         console.log(resp);
+        const payload: { accessToken: string; clientToken: string } = {
+          accessToken: resp.tokens.accessToken,
+          clientToken: resp.tokens.clientToken,
+        };
+        dispatch(storeTokens(payload));
       })
       .catch((err) => setMessage(err.error));
   };
