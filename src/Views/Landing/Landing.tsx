@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useLoginMutation } from "../../redux/services";
 import { useDispatch, useSelector } from "react-redux";
-import { storeTokens, clearTokens } from "../../redux/actions/UserActions";
+import {
+  storeTokens,
+  storeUserProfile,
+  clearTokens,
+} from "../../redux/actions/UserActions";
 import {
   getAccessToken,
-  getClientToken,
+  // getClientToken,
 } from "../../redux/reducers/userSliceReducer";
 import Button from "react-bootstrap/Button";
 // import Col from "react-bootstrap/Col";
@@ -13,11 +17,12 @@ import Container from "react-bootstrap/Container";
 // import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
 import { Navigate } from "react-router-dom";
+import { UserProfile } from "../../types/responses/UserProfile";
 
 const Landing = () => {
   const dispatch = useDispatch();
   const accessToken = useSelector(getAccessToken);
-  const clientToken = useSelector(getClientToken);
+  // const clientToken = useSelector(getClientToken);
 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -35,11 +40,19 @@ const Landing = () => {
           clientToken: resp.tokens.clientToken,
         };
         dispatch(storeTokens(payload));
+
+        const userProfile: UserProfile = {
+          message: resp.message,
+          user: resp.user,
+          accesses: resp.accesses,
+          view: resp.view,
+        };
+        dispatch(storeUserProfile(userProfile));
       })
       .catch((err) => setMessage(err.error));
   };
 
-  if (!accessToken || !clientToken) {
+  if (accessToken) {
     return <Navigate to={"/"} />;
   }
 

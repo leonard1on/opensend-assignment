@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "./store/store";
 import { LoginResponse } from "../types/responses/LoginResponse";
 import { UserProfile } from "../types/responses/UserProfile";
+import { StoreInfo } from "../types/responses/StoreInfoResponse";
 
 type loginParams = {
   email: string;
@@ -15,8 +16,10 @@ export const api = createApi({
       const accessToken = (getState() as RootState).user.accessToken;
       const clientToken = (getState() as RootState).user.clientToken;
 
-      if (accessToken && clientToken) {
+      if (accessToken) {
         headers.set("Access-Token", `Bearer ${accessToken}`);
+      }
+      if (clientToken) {
         headers.set("Client-Token", clientToken);
       }
       return headers;
@@ -39,10 +42,9 @@ export const api = createApi({
         method: "GET",
       }),
     }),
-    getStoreInfo: build.query<unknown, string>({
+    getStoreInfo: build.query<StoreInfo, number>({
       query: (id) => ({
-        url: "/store",
-        params: { id },
+        url: `/store/${id}`,
         method: "GET",
       }),
     }),
