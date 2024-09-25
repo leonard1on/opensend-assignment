@@ -1,4 +1,9 @@
 import { userSlice } from "../reducers/userSliceReducer";
 
-export const { storeIsOnboarded, storeTokens, storeUserProfile, clearTokens } =
-  userSlice.actions;
+export const {
+  storeIsOnboarded,
+  storeTokens,
+  storeUserProfile,
+  switchThemes,
+  clearTokens,
+} = userSlice.actions;

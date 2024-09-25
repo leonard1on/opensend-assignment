@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -13,6 +16,16 @@
   -moz-osx-font-smoothing: grayscale;
 
   --primary: #288364;
+  --primary-dark: #19694e;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center; /* Or adjust depending on layout */
 }
 
 a {
@@ -25,11 +38,13 @@ a:hover {
 }
 
 body {
+  font-family: 'Inter', sans-serif;
   margin: 0;
   display: flex;
   /* place-items: center; */
   min-width: 320px;
   min-height: 100vh;
+  background-color: rgb(219, 219, 219);
 }
 
 h1 {
@@ -40,6 +55,11 @@ h1 {
 .btn-primary{
   --bs-btn-bg: var(--primary);
   --bs-btn-border-color: var(--primary);
+}
+
+.btn.disabled, .btn:disabled, fieldset:disabled .btn{
+  background-color: var(--primary);
+  border-color: var(--primary);
 }
 
 .red{

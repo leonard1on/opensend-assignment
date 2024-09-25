@@ -6,12 +6,14 @@ export const getAccessToken = (state: RootState) => state.user.accessToken;
 export const getClientToken = (state: RootState) => state.user.clientToken;
 export const getUserProfile = (state: RootState) => state.user.userProfile;
 export const getIsOnboarded = (state: RootState) => state.user.isOnboarded;
+export const getTheme = (state: RootState) => state.user.theme;
 
 interface userSlice {
   accessToken: string;
   clientToken: string;
   userProfile?: UserProfile;
   isOnboarded: boolean;
+  theme: string;
 }
 
 const initialState: userSlice = {
@@ -19,6 +21,7 @@ const initialState: userSlice = {
   clientToken: localStorage.getItem("clientToken") || "",
   userProfile: undefined,
   isOnboarded: false,
+  theme: "light",
 };
 
 export const userSlice = createSlice({
@@ -41,6 +44,13 @@ export const userSlice = createSlice({
       state.clientToken = clientToken;
       if (accessToken) localStorage.setItem("accessToken", accessToken);
       if (clientToken) localStorage.setItem("clientToken", clientToken);
+    },
+    switchThemes(state) {
+      if (state.theme === "light") {
+        state.theme = "dark";
+      } else {
+        state.theme = "light";
+      }
     },
     clearTokens(state) {
       state.accessToken = "";
